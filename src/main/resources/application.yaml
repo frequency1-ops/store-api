@@ -1,6 +1,12 @@
 spring:
     application:
         name: store
+    datasource:
+        url: jdbc:mysql://localhost:3306/storedb
+        username: root
+        password: Amafreak#1
+    flyway:
+        baseline-on-migrate: true    
 stripe:
     api:
         url: https://api.stripe.com
@@ -11,3 +17,4 @@ stripe:
 mail:
     host: https://smtp.gmail.com
     port: 5761
+
