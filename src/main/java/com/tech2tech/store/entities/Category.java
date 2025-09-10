@@ -8,23 +8,29 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 @Entity
-@Table(name = "tags")
+@Table(name = "categories")
 @Data
+@AllArgsConstructor
 @NoArgsConstructor
-public class Tag {
+public class Category {
+
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     @Column(name = "id")
-    private Integer id;
+    private byte id;
 
     @Column(name = "name")
     private String name;
 
-    @ManyToMany(mappedBy="tags")
-    private Set<User> users = new HashSet<>();
+    @OneToMany(mappedBy="category")
+    private Set<Product> products = new HashSet<>();
+   
+    
 }

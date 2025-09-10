@@ -1,0 +1,13 @@
+CREATE TABLE categories(
+    id TINYINT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE products(
+    id BIGINT PRIMARY KEY NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    price DECIMAL(10,2),
+    category_id TINYINT,
+    CONSTRAINT fk_category
+    FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE RESTRICT
+);

@@ -14,6 +14,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -58,5 +59,17 @@ public class User {
     joinColumns= @JoinColumn(name = "user_id"), 
     inverseJoinColumns=@JoinColumn(name="tag_id"))
     private Set<Tag> tags = new HashSet<>();
+
+    public void addTag(String tagName){
+        var tag = new Tag();
+        tags.add(tag);
+        tag.getUsers().add(this);
+    }
+    public void removeTag(Tag tag){
+        tags.remove(tag);
+    }
+
+    @OneToOne(mappedBy="user")
+    private Profile profile;
 
 }
