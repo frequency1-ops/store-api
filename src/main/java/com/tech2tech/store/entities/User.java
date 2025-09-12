@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -17,6 +18,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -25,57 +27,56 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class User {
-    
-    @Id
+     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @Column(nullable = false, name = "name")
+    @Column(name = "name")
     private String name;
 
-    @Column(nullable = false, name = "email")
+    @Column(name = "email")
     private String email;
-    
-    @Column(nullable = false, name = "password")
+
+    @Column(name = "password")
     private String password;
 
-    @OneToMany(mappedBy="user")
+    @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
+    @Builder.Default
     private List<Address> addresses = new ArrayList<>();
 
-     public void addAddresses(Address address) {
+    public void addAddress(Address address) {
         addresses.add(address);
         address.setUser(this);
     }
 
-    public void removeAddresses(Address address) {
+    public void removeAddress(Address address) {
         addresses.remove(address);
         address.setUser(null);
     }
 
-    @ManyToMany
-    @JoinTable(name = "user_tags", 
-    joinColumns= @JoinColumn(name = "user_id"), 
-    inverseJoinColumns=@JoinColumn(name="tag_id"))
-    private Set<Tag> tags = new HashSet<>();
-
-    public void addTag(String tagName){
-        var tag = new Tag();
-        tags.add(tag);
-        tag.getUsers().add(this);
-    }
-    public void removeTag(Tag tag){
-        tags.remove(tag);
-    }
-
-    @OneToOne(mappedBy="user")
+    @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE)
     private Profile profile;
 
-    @ManyToMany()
-    @JoinTable(name="wishlist",
-     joinColumns= @JoinColumn(name="user_id"),
-      inverseJoinColumns=@JoinColumn(name="product_id"))
-    private Set<Product> wishList = new HashSet<>();
+    @ManyToMany
+    @JoinTable(
+        name = "wishlist",
+        joinColumns = @JoinColumn(name = "user_id"),
+        inverseJoinColumns = @JoinColumn(name = "product_id")
+    )
+    private Set<Product> favoriteProducts = new HashSet<>();
 
+    public void addFavoriteProduct(Product product) {
+        favoriteProducts.add(product);
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "(" +
+                "id = " + id + ", " +
+                "name = " + name + ", " +
+                "email = " + email + ")";
+    }
 }
