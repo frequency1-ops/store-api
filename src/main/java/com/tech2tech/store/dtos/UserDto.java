@@ -1,13 +1,13 @@
 package com.tech2tech.store.dtos;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
 
-@Data
 @AllArgsConstructor
-@NoArgsConstructor
-public class ProductSummaryDTO {
+@Getter
+public class UserDto {
     private Long id;
     private String name;
+    private String email;
+
 }
