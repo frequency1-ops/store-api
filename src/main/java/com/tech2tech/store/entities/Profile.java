@@ -34,7 +34,7 @@ public class Profile {
     @Column(name = "date_of_birth")
     private LocalDate dateOfBirth;
 
-    @Column(name = "loyality_points")
+    @Column(name = "loyalty_points")
     private Integer loyaltyPoints;
 
     @OneToOne(fetch= FetchType.LAZY)
