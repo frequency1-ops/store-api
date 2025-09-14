@@ -7,6 +7,7 @@ import com.tech2tech.store.entities.User;
 
 @Mapper(componentModel = "spring")
 public interface UserMapper {
+   
     UserDto toDto(User user);
 
 }
