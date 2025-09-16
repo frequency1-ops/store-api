@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.tech2tech.store.dtos.RegisterUserRequest;
 import com.tech2tech.store.dtos.UserDto;
 import com.tech2tech.store.mappers.UserMapper;
 import com.tech2tech.store.repositories.UserRepository;
@@ -50,7 +51,10 @@ public class UserController {
     
     }
     @PostMapping
-    public UserDto createUser(@RequestBody UserDto data){
-        return data;
+    public UserDto createUser(@RequestBody RegisterUserRequest request){
+        var user = userMapper.toEntity(request);
+        userRepository.save(user);
+        var userDto = userMapper.toDto(user);
+        return userDto;
     }
 }
