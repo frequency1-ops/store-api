@@ -4,6 +4,7 @@ import java.util.Set;
 
 import org.mapstruct.control.MappingControl.Use;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.tech2tech.store.dtos.ChangePasswordRequest;
 import com.tech2tech.store.dtos.RegisterUserRequest;
 import com.tech2tech.store.dtos.UpdateUserRequest;
 import com.tech2tech.store.dtos.UserDto;
@@ -86,6 +88,24 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
         userRepository.delete(user);
+        return ResponseEntity.noContent().build();
+
+    }
+    @PostMapping("/{id}/change-password")
+    public ResponseEntity<Void> changePassword(
+        @PathVariable(name = "id") Long id,
+        @RequestBody ChangePasswordRequest request
+        ){
+        var user = userRepository.findById(id).orElse(null);
+        if (user == null){
+            return ResponseEntity.notFound().build();
+        }
+        if (!user.getPassword().equals(request.getOldPassword())){
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
+        user.setPassword(request.getNewPassword());
+        userRepository.save(user);
         return ResponseEntity.noContent().build();
 
     }
