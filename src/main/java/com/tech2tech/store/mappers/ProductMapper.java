@@ -2,6 +2,7 @@ package com.tech2tech.store.mappers;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
 import com.tech2tech.store.dtos.ProductDto;
 import com.tech2tech.store.entities.Product;
@@ -10,5 +11,8 @@ import com.tech2tech.store.entities.Product;
 public interface ProductMapper {
     @Mapping(source = "category.id", target = "categoryId")
     ProductDto toDto(Product product);
+    Product toEntity(ProductDto productDto);
+    @Mapping(target = "id", ignore = true)
+    void update(ProductDto productDto, @MappingTarget Product product);
 
 }
