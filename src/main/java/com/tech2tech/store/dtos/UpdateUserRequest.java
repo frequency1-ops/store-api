@@ -1,5 +1,9 @@
 package com.tech2tech.store.dtos;
 
-public class UpdateUserRequest {
+import lombok.Data;
 
+@Data
+public class UpdateUserRequest {
+    private String name;
+    private String email;
 }
