@@ -1,20 +1,16 @@
 package com.tech2tech.store.controllers;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
+import jakarta.validation.Valid;
 import org.mapstruct.control.MappingControl.Use;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.tech2tech.store.dtos.ChangePasswordRequest;
@@ -58,7 +54,14 @@ public class UserController {
     
     }
     @PostMapping
-    public ResponseEntity<UserDto> createUser(@RequestBody RegisterUserRequest request, UriComponentsBuilder uriBuilder){
+    public ResponseEntity<?> registerUser(@RequestBody @Valid RegisterUserRequest request, UriComponentsBuilder uriBuilder){
+
+        if(userRepository.existsByEmail(request.getEmail())){
+            return ResponseEntity.badRequest().body(
+                    Map.of("email", "Email is already Registered")
+            );
+        }
+
         var user = userMapper.toEntity(request);
         userRepository.save(user);
         var userDto = userMapper.toDto(user);
@@ -109,4 +112,5 @@ public class UserController {
         return ResponseEntity.noContent().build();
 
     }
+
 }
