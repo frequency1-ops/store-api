@@ -7,6 +7,8 @@ import com.tech2tech.store.dtos.UpdateCartItemRequest;
 import com.tech2tech.store.exceptions.CartNotFoundException;
 import com.tech2tech.store.exceptions.ProductNotFoundException;
 import com.tech2tech.store.services.CartService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -38,7 +40,9 @@ public class CartController {
     }
 
     @PostMapping("/{cartId}/items")
+    @Operation(summary = "Adds a product to the cart")
     public ResponseEntity<CartItemDto> addToCart(
+            @Parameter(description = "Id of the cart")
             @PathVariable UUID cartId,
             @RequestBody AddItemToCartRequest request
     ) {
