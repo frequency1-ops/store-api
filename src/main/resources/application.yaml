@@ -13,5 +13,6 @@ spring:
         url: jdbc:mysql://localhost:3306/store_api
         user: root
         password: Amafreak#1 
-
+    jwt:
+        secret: ${JWT_SECRET}
 
