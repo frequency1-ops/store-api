@@ -1,11 +1,14 @@
 package com.tech2tech.store.controllers;
 
+import com.tech2tech.store.config.JwtConfig;
 import com.tech2tech.store.dtos.JwtResponse;
 import com.tech2tech.store.dtos.LoginRequest;
 import com.tech2tech.store.dtos.UserDto;
 import com.tech2tech.store.mappers.UserMapper;
 import com.tech2tech.store.repositories.UserRepository;
 import com.tech2tech.store.services.JwtService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,27 +28,44 @@ public class AuthController {
     private final JwtService jwtService;
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final JwtConfig jwtConfig;
 
 
     @PostMapping("/login")
-    public ResponseEntity<JwtResponse> login(@Valid @RequestBody LoginRequest request) {
+    public ResponseEntity<JwtResponse> login(@Valid @RequestBody LoginRequest request, HttpServletResponse response) {
 
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
         );
 
         var user = userRepository.findByEmail(request.getEmail()).orElseThrow();
-        var token = jwtService.generateToken(user);
+        var accessToken = jwtService.generateAccesToken(user);
+        var refreshToken = jwtService.generateRefreshToken(user);
 
-       return ResponseEntity.ok(new JwtResponse(token));
+        var cookie = new Cookie("refresh_token", refreshToken);
+        cookie.setHttpOnly(true);
+        cookie.setPath("/auth/refresh");
+        cookie.setMaxAge(jwtConfig.getRefreshTokenExpiriation()); //7d
+        cookie.setSecure(true);
+        response.addCookie(cookie);
+
+       return ResponseEntity.ok(new JwtResponse(accessToken));
     }
 
-    @PostMapping("/validate")
-    public boolean validate(@RequestHeader("Authorization") String authheader) {
-        System.out.println("Validate called");
-        var token = authheader.replace("Bearer ", ""); //bearer
-        return jwtService.validateToken(token);
+    @PostMapping("/refresh")
+    public ResponseEntity<JwtResponse> refresh(
+            @CookieValue(value = "refreshToken") String refreshToken
+    ){
+        if(!jwtService.validateToken(refreshToken)){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        var userId = jwtService.getUserIdFromToken(refreshToken);
+        var user = userRepository.findById(userId).orElseThrow();
+        var accessToken = jwtService.generateAccesToken(user);
+
+        return ResponseEntity.ok(new JwtResponse(accessToken));
     }
+
     @GetMapping("/me")
     public ResponseEntity<UserDto> me(){
         var authentication = SecurityContextHolder.getContext().getAuthentication();

@@ -15,4 +15,6 @@ spring:
         password: Amafreak#1 
     jwt:
         secret: ${JWT_SECRET}
+        accessTokenExpiriation: 900 #5min
+        refreshTokenExpiriation: 604800 #7 days
 
