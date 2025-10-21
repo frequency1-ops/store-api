@@ -6,6 +6,7 @@ import com.tech2tech.store.dtos.LoginRequest;
 import com.tech2tech.store.dtos.UserDto;
 import com.tech2tech.store.mappers.UserMapper;
 import com.tech2tech.store.repositories.UserRepository;
+import com.tech2tech.store.services.AuthService;
 import com.tech2tech.store.services.JwtService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
@@ -29,6 +30,7 @@ public class AuthController {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final JwtConfig jwtConfig;
+    private final AuthService authService;
 
 
     @PostMapping("/login")
@@ -68,10 +70,8 @@ public class AuthController {
 
     @GetMapping("/me")
     public ResponseEntity<UserDto> me(){
-        var authentication = SecurityContextHolder.getContext().getAuthentication();
-        var userId = (Long) authentication.getPrincipal();
 
-        var user = userRepository.findById(userId).orElse(null);
+        var user = authService.getCurrentUser();
         if(user == null) {
             return ResponseEntity.notFound().build();
         }
