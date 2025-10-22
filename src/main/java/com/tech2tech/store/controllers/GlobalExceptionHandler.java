@@ -1,5 +1,6 @@
 package com.tech2tech.store.controllers;
 
+import com.tech2tech.store.dtos.ErrorDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -13,8 +14,8 @@ import java.util.Map;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<Map<String, String>> handleUnreadableMessage(){
-        return ResponseEntity.badRequest().body(Map.of("error", "Unreadable Message"));
+    public ResponseEntity<ErrorDto> handleUnreadableMessage(){
+        return ResponseEntity.badRequest().body(new ErrorDto("Unreadable Message"));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

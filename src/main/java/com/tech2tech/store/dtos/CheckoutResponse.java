@@ -1,15 +1,14 @@
 package com.tech2tech.store.dtos;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
 
-public class ChaeckoutResponse {
+public class CheckoutResponse {
 
     private Long orderId;
 
-    public ChaeckoutResponse(Long orderId) {
+    public CheckoutResponse(Long orderId) {
         this.orderId = orderId;
     }
 }
