@@ -17,4 +17,7 @@ spring:
         secret: ${JWT_SECRET}
         accessTokenExpiriation: 7200 #2 hrs
         refreshTokenExpiriation: 604800 #7 days
+stripe:
+    secretKey: ${STRIPE_SECRET_KEY}
+
 
