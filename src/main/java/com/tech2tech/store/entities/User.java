@@ -6,10 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Table(name = "users")
@@ -17,10 +14,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class User {
      @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
+     @EqualsAndHashCode.Include
     private Long id;
 
     @Column(name = "name")
