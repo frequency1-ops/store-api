@@ -1,8 +1,6 @@
 package com.tech2tech.store.controllers;
 
 
-import com.stripe.exception.SignatureVerificationException;
-import com.stripe.net.Webhook;
 import com.tech2tech.store.dtos.CheckoutRequest;
 import com.tech2tech.store.dtos.CheckoutResponse;
 import com.tech2tech.store.dtos.ErrorDto;
@@ -10,14 +8,16 @@ import com.tech2tech.store.exceptions.CartEmptyException;
 import com.tech2tech.store.exceptions.CartNotFoundException;
 
 import com.tech2tech.store.exceptions.PaymentException;
+import com.tech2tech.store.repositories.OrderRepository;
 import com.tech2tech.store.services.CheckoutService;
+import com.tech2tech.store.services.WebhookRequest;
 import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -25,8 +25,8 @@ import org.springframework.web.bind.annotation.*;
 public class CheckoutController {
 
     private final CheckoutService checkoutService;
-    @Value("${stripe.webhookSecretKey}")
-    private String webhookSecretKey;
+    private final OrderRepository orderRepository;
+
 
 
     @PostMapping
@@ -35,28 +35,11 @@ public class CheckoutController {
     }
 
     @PostMapping("/webhook")
-    public ResponseEntity<Void> handleWebhook(
-            @RequestHeader("Stripe-Signature") String signature,
+    public void handleWebhook(
+            @RequestHeader Map<String, String> headers,
             @RequestBody String payload
             ){
-        try {
-            var event = Webhook.constructEvent(payload, signature, webhookSecretKey);
-            var stripeObject = event.getDataObjectDeserializer().getObject().orElse(null);
-            switch (event.getType()) {
-                case "payment_intent.succeeded" -> {
-                    //update order status (PAID)
-                }
-                case "payment_intent.failed" -> {
-                    //update order status (FAILED)
-                }
-            }
-            return ResponseEntity.ok().build();
-
-        } catch (SignatureVerificationException e) {
-            return ResponseEntity.badRequest().build();
-
-
-        }
+            checkoutService.handleWebhookEvent(new WebhookRequest(headers, payload));
 
     }
 

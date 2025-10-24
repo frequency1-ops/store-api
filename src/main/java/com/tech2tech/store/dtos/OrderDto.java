@@ -1,6 +1,5 @@
 package com.tech2tech.store.dtos;
 
-import com.tech2tech.store.entities.OrderStatus;
 import lombok.Data;
 
 import java.math.BigDecimal;

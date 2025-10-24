@@ -11,6 +11,7 @@ import com.tech2tech.store.repositories.CartRepository;
 import com.tech2tech.store.repositories.OrderRepository;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -51,5 +52,13 @@ public class CheckoutService {
           orderRepository.delete(order);
           throw ex;
       }
+    }
+    public void handleWebhookEvent(WebhookRequest request){
+        paymentGateway.parseWebhookRequest(request).ifPresent(paymentResults-> {
+            var order = orderRepository.findById(paymentResults.getOrderId()).orElseThrow();
+            order.setStatus(paymentResults.getPaymentStatus());
+            orderRepository.save(order);
+        });
+
     }
 }
