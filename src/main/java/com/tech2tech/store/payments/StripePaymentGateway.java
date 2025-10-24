@@ -1,4 +1,4 @@
-package com.tech2tech.store.services;
+package com.tech2tech.store.payments;
 
 import com.stripe.exception.SignatureVerificationException;
 import com.stripe.exception.StripeException;
@@ -10,7 +10,6 @@ import com.stripe.param.checkout.SessionCreateParams;
 import com.tech2tech.store.entities.Order;
 import com.tech2tech.store.entities.OrderItem;
 import com.tech2tech.store.entities.PaymentStatus;
-import com.tech2tech.store.exceptions.PaymentException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 

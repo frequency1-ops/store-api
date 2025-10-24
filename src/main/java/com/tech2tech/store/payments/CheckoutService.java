@@ -1,17 +1,15 @@
-package com.tech2tech.store.services;
+package com.tech2tech.store.payments;
 
 
-import com.tech2tech.store.dtos.CheckoutRequest;
-import com.tech2tech.store.dtos.CheckoutResponse;
 import com.tech2tech.store.entities.Order;
 import com.tech2tech.store.exceptions.CartEmptyException;
 import com.tech2tech.store.exceptions.CartNotFoundException;
-import com.tech2tech.store.exceptions.PaymentException;
 import com.tech2tech.store.repositories.CartRepository;
 import com.tech2tech.store.repositories.OrderRepository;
+import com.tech2tech.store.services.AuthService;
+import com.tech2tech.store.services.CartService;
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

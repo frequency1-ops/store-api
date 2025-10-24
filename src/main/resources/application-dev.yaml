@@ -1,0 +1,9 @@
+spring:
+    datasource:
+        url: jdbc:mysql://localhost:3306/store_api
+        username: root
+        password: Amafreak#1
+    jpa:
+        show-sql: true
+
+websiteUrl: https://localhost:4242

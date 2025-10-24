@@ -1,4 +1,4 @@
-package com.tech2tech.store.config;
+package com.tech2tech.store.payments;
 
 import com.stripe.Stripe;
 import jakarta.annotation.PostConstruct;

@@ -1,4 +1,4 @@
-package com.tech2tech.store.dtos;
+package com.tech2tech.store.payments;
 
 import lombok.Data;
 

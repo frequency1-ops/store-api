@@ -1,4 +1,4 @@
-package com.tech2tech.store.services;
+package com.tech2tech.store.payments;
 
 import com.tech2tech.store.entities.PaymentStatus;
 import lombok.AllArgsConstructor;

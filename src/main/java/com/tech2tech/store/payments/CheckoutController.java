@@ -1,16 +1,11 @@
-package com.tech2tech.store.controllers;
+package com.tech2tech.store.payments;
 
 
-import com.tech2tech.store.dtos.CheckoutRequest;
-import com.tech2tech.store.dtos.CheckoutResponse;
 import com.tech2tech.store.dtos.ErrorDto;
 import com.tech2tech.store.exceptions.CartEmptyException;
 import com.tech2tech.store.exceptions.CartNotFoundException;
 
-import com.tech2tech.store.exceptions.PaymentException;
 import com.tech2tech.store.repositories.OrderRepository;
-import com.tech2tech.store.services.CheckoutService;
-import com.tech2tech.store.services.WebhookRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

@@ -1,4 +1,4 @@
-package com.tech2tech.store.services;
+package com.tech2tech.store.payments;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

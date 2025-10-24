@@ -1,4 +1,4 @@
-package com.tech2tech.store.exceptions;
+package com.tech2tech.store.payments;
 
 import lombok.NoArgsConstructor;
 
