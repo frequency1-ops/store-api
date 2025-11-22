@@ -80,9 +80,7 @@ public class UserController {
         @RequestBody UpdateUserRequest request
         ){
             var user = userRepository.findById(id).orElseThrow();
-            if (user == null){
-                return ResponseEntity.notFound().build();
-            }
+
 
             userMapper.update(request, user);
             userRepository.save(user);
