@@ -113,6 +113,7 @@ public class UserController {
         user.setPassword(request.getNewPassword());
         userRepository.save(user);
         return ResponseEntity.noContent().build();
+        // not soo important comment
 
     }
 
